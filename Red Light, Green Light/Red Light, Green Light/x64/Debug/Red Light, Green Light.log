@@ -1,2 +1,3 @@
 ﻿  Source.cpp
-  Red Light, Green Light.vcxproj -> C:\Users\vacu9\source\repos\Red-Light-Green-Light\x64\Debug\Red Light, Green Light.exe
+C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\Red Light, Green Light\Source.cpp(75,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Red Light, Green Light.vcxproj -> C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\x64\Debug\Red Light, Green Light.exe

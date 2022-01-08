@@ -10,6 +10,13 @@
 using namespace std;
 using namespace sf;
 
+int random_integer(int min, int max) {
+	random_device seed; // Generate a random seed
+	mt19937_64 mersenne(seed());
+	uniform_int_distribution<> random(min, max);
+	return random(mersenne);
+}
+
 class Starter {
 public:
 	RenderWindow window;
@@ -20,11 +27,11 @@ public:
 	Text text;
 
 	SoundBuffer soundbuffer[2]; // Sound
-	Sound red_light_green_light_sound;
 	Sound shooting_sound;
+	Sound red_light_green_light_sound;
 
 	Starter() {
-		window.create(VideoMode(800, 600), "Red light, green light"); // Window
+		window.create(VideoMode(800, 900), "Red light, green light"); // Window
 		window.setFramerateLimit(60);
 		window.clear(Color::Black);
 
@@ -45,25 +52,99 @@ public:
 	}
 };
 
+//void alarm(int target_time, bool times_up) {
+//	int elapsed_time = 0;
+//	while (true) {
+//		Sleep(1);
+//		elapsed_time++;
+//		if (elapsed_time == target_time) {
+//			times_up = true;
+//			return;
+//		}
+//	}
+//}
+
+class NPC {
+	Texture stickman_texture; // Player
+	Sprite npc;
+public:
+	NPC(int y) {
+		stickman_texture.loadFromFile("resources/stickman.png"); // Player
+		npc.setTexture(stickman_texture);
+		npc.scale(0.2f, 0.2f);
+		npc.setPosition(11, y);
+	}
+
+	void draw_npc(RenderWindow& window) {
+		window.draw(npc);
+	}
+
+	void NPC_action(Starter& starter) {
+		while (true) {
+			int moving_interval = random_integer(60, 300);
+			printf("%d\n", moving_interval);
+			/*bool times_up = false;
+			thread thread1(alarm, 1000, times_up);
+			thread1.detach();*/
+			while (starter.red_light_green_light_sound.getStatus() == Sound::Playing) {
+				npc.move(3, 0);
+				Sleep(moving_interval);
+			}
+			while (starter.red_light_green_light_sound.getStatus() != Sound::Playing);
+		}
+	}
+};
+
+class NPC_set {
+	vector<NPC*> npcs;
+	Texture stickman_texture;
+	vector<thread> threads;
+public:
+	NPC_set() {
+		int y = 800 - 80;
+		for (int i = 0; i < 3; i++) {
+			npcs.push_back(new NPC(y));
+			y -= 100;
+		}
+	}
+
+	void draw_npcs(RenderWindow& window) {
+		for (int i = 0; i < 3; i++)
+			npcs[i]->draw_npc(window);
+	}
+
+	void NPCs_action(Starter& starter) {
+		for (int i = 0; i < 3; i++) {
+			threads.push_back(thread(&NPC::NPC_action, npcs[i], ref(starter)));
+			threads[i].detach();
+		}
+
+		//thread thread1(&NPC::NPC_action, npcs[0], ref(starter));
+		//thread thread2(&NPC::NPC_action, npcs[1], ref(starter));
+		//thread thread3(&NPC::NPC_action, npcs[2], ref(starter));
+		//thread1.detach();
+		//thread2.detach();
+		//thread3.detach();
+	}
+};
 
 class Main_game {
 	int seconds = 60;
 	Font font;
 	Text text;
 
-	Texture red_light; // Robot
-	Texture green_light;
+	bool right_key_pressed = false, game_done = false;
+	
+	Texture red_light, green_light; // Robot
 	Sprite robot;
-
 	Texture stickman_texture; // Player
 	Sprite player;
 
-	bool right_key_pressed = false, game_done = false;
 public:
 	Event event;
 
 	Main_game() {
-		font.loadFromFile("resources/AGENCYR.ttf"); // Text
+		font.loadFromFile("resources/AGENCYR.ttf"); // Score
 		text.setFont(font);
 		text.setFillColor(Color::Black);
 		text.setCharacterSize(44);
@@ -71,12 +152,11 @@ public:
 
 		red_light.loadFromFile("resources/red_light.png"); // Robot
 		green_light.loadFromFile("resources/green_light.png");
-		robot.setPosition(400, 100);
-		robot.scale(1.2f, 1.2f);
+		robot.setPosition(350, 110);
 
 		stickman_texture.loadFromFile("resources/stickman.png"); // Player
 		player.setTexture(stickman_texture);
-		player.setPosition(11, 600 - 80);
+		player.setPosition(11, 900 - 80);
 		player.scale(0.2f, 0.2f);
 	}
 
@@ -86,7 +166,7 @@ public:
 
 	void move_right(Sound& red_light_green_light_sound, Sound& shooting_sound) {
 		player.move(3, 0);
-		if (red_light_green_light_sound.getStatus() == Sound::Playing == false || seconds <= 0) { // Kill if the robot is looking left or time's up
+		if (red_light_green_light_sound.getStatus() == Sound::Playing == false || seconds <= 0) { // Kill if the robot is watching or time's up
 			game_done = true;
 			shooting_sound.play();
 			red_light_green_light_sound.stop();
@@ -184,11 +264,11 @@ public:
 
 int main() {
 	Starter starter;
-
 	starter.window.draw(starter.text);
 	starter.window.display();
 
 	Main_game main_game;
+	NPC_set npc_set;
 
 	while (true) { // Wait until Enter is pressed to start
 		if (starter.window.pollEvent(main_game.event))
@@ -202,6 +282,8 @@ int main() {
 	thread thread2(&Main_game::timer, &main_game); 
 	thread2.detach();
 
+	npc_set.NPCs_action(starter);
+
 	while (starter.window.isOpen()) {
 		starter.window.clear(Color::White);
 
@@ -210,6 +292,7 @@ int main() {
 		main_game.draw_plyaer(starter.window);
 		main_game.draw_text(starter.window);
 		main_game.draw_robot(starter.window);
+		npc_set.draw_npcs(starter.window);
 
 		starter.window.display();
 
