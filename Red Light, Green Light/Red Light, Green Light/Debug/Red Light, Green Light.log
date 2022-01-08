@@ -1,0 +1,37 @@
+﻿  Source.cpp
+Source.obj : error LNK2019: unresolved external symbol "public: __thiscall sf::String::String(char const *,class std::locale const &)" (??0String@sf@@QAE@PBDABVlocale@std@@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: static bool __cdecl sf::Keyboard::isKeyPressed(enum sf::Keyboard::Key)" (?isKeyPressed@Keyboard@sf@@SA_NW4Key@12@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: __thiscall sf::VideoMode::VideoMode(unsigned int,unsigned int,unsigned int)" (??0VideoMode@sf@@QAE@III@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: bool __thiscall sf::Window::isOpen(void)const " (?isOpen@Window@sf@@QBE_NXZ) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: bool __thiscall sf::Window::pollEvent(class sf::Event &)" (?pollEvent@Window@sf@@QAE_NAAVEvent@2@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Window::setFramerateLimit(unsigned int)" (?setFramerateLimit@Window@sf@@QAEXI@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Window::display(void)" (?display@Window@sf@@QAEXXZ) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: virtual __thiscall sf::Transformable::~Transformable(void)" (??1Transformable@sf@@UAE@XZ) referenced in function "public: virtual __thiscall sf::Text::~Text(void)" (??1Text@sf@@UAE@XZ)
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Transformable::setPosition(float,float)" (?setPosition@Transformable@sf@@QAEXMM@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: __thiscall sf::Font::Font(void)" (??0Font@sf@@QAE@XZ) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: __thiscall sf::Font::~Font(void)" (??1Font@sf@@QAE@XZ) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: bool __thiscall sf::Font::loadFromFile(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)" (?loadFromFile@Font@sf@@QAE_NABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::RenderTarget::clear(class sf::Color const &)" (?clear@RenderTarget@sf@@QAEXABVColor@2@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::RenderTarget::draw(class sf::Drawable const &,class sf::RenderStates const &)" (?draw@RenderTarget@sf@@QAEXABVDrawable@2@ABVRenderStates@2@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: __thiscall sf::RenderWindow::RenderWindow(class sf::VideoMode,class sf::String const &,unsigned int,struct sf::ContextSettings const &)" (??0RenderWindow@sf@@QAE@VVideoMode@1@ABVString@1@IABUContextSettings@1@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: virtual __thiscall sf::RenderWindow::~RenderWindow(void)" (??1RenderWindow@sf@@UAE@XZ) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: __thiscall sf::Text::Text(void)" (??0Text@sf@@QAE@XZ) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Text::setString(class sf::String const &)" (?setString@Text@sf@@QAEXABVString@2@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Text::setFont(class sf::Font const &)" (?setFont@Text@sf@@QAEXABVFont@2@@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Text::setCharacterSize(unsigned int)" (?setCharacterSize@Text@sf@@QAEXI@Z) referenced in function _main
+Source.obj : error LNK2019: unresolved external symbol "public: void __thiscall sf::Text::setFillColor(class sf::Color const &)" (?setFillColor@Text@sf@@QAEXABVColor@2@@Z) referenced in function _main
+Source.obj : error LNK2001: unresolved external symbol "public: static class sf::RenderStates const sf::RenderStates::Default" (?Default@RenderStates@sf@@2V12@B)
+Source.obj : error LNK2001: unresolved external symbol "public: static class sf::Color const sf::Color::Black" (?Black@Color@sf@@2V12@B)
+Source.obj : error LNK2001: unresolved external symbol "public: static class sf::Color const sf::Color::Green" (?Green@Color@sf@@2V12@B)
+C:\Users\vacu9\source\repos\SFML\lib\sfml-window-s-d.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\sfml-system-s-d.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\sfml-graphics-s-d.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\sfml-audio-s-d.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\freetype.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\openal32.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\flac.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\vorbisenc.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\vorbisfile.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\vorbis.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\SFML\lib\ogg.lib : warning LNK4272: library machine type 'x64' conflicts with target machine type 'x86'
+C:\Users\vacu9\source\repos\Red Light, Green Light\Debug\Red Light, Green Light.exe : fatal error LNK1120: 24 unresolved externals
