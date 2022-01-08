@@ -13,7 +13,7 @@ Squid game was very popular recently. In the series, the game called Red light, 
 
 ## Game rule, features
 * If you move while the robot is watching you, you get killed. Be careful.
-* You have to press the arrow key on the keyboard as fast as possible to move faster because you can't move holding the key.
+* You have to repeat pressing the arrow key on the keyboard as fast as possible to move faster because you can't move holding the key.
 * You have some competitors.
 
 ## Control
