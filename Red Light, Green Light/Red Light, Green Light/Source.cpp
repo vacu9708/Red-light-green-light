@@ -42,7 +42,7 @@ public:
 		text.setFont(font);
 		text.setFillColor(Color::Green);
 		text.setCharacterSize(55);
-		text.setPosition(88, 233);
+		text.setPosition(200, 380);
 		text.setString("Press Enter to start");
 
 		soundbuffer[0].loadFromFile("resources/Red light green light sound.wav"); // Sound
@@ -81,7 +81,7 @@ public:
 
 	void NPC_action(Starter& starter) {
 		while (true) {
-			int moving_interval = random_integer(60, 300);
+			int moving_interval = random_integer(70, 300);
 			printf("%d\n", moving_interval);
 			/*bool times_up = false;
 			thread thread1(alarm, 1000, times_up);
@@ -89,6 +89,8 @@ public:
 			while (starter.red_light_green_light_sound.getStatus() == Sound::Playing) {
 				npc.move(3, 0);
 				Sleep(moving_interval);
+				if (npc.getPosition().x > 800) // NPC winning the game
+					return;
 			}
 			while (starter.red_light_green_light_sound.getStatus() != Sound::Playing);
 		}
@@ -134,7 +136,7 @@ class Main_game {
 	Text text;
 
 	bool right_key_pressed = false, game_done = false;
-	
+
 	Texture red_light, green_light; // Robot
 	Sprite robot;
 	Texture stickman_texture; // Player
@@ -231,14 +233,14 @@ public:
 	void game_over() {
 		text.setFillColor(Color::Red);
 		text.setCharacterSize(55);
-		text.setPosition(111, 233);
+		text.setPosition(200, 380);
 		text.setString("GAME OVER");
 	}
 
 	void game_clear() {
 		text.setFillColor(Color::Yellow);
 		text.setCharacterSize(55);
-		text.setPosition(111, 233);
+		text.setPosition(200, 380);
 		text.setString("GAME CLEAR");
 	}
 
@@ -279,7 +281,7 @@ int main() {
 	thread thread1(&Main_game::robot_killer, &main_game, ref(starter.red_light_green_light_sound)); // Robot killer
 	thread1.detach();
 
-	thread thread2(&Main_game::timer, &main_game); 
+	thread thread2(&Main_game::timer, &main_game);
 	thread2.detach();
 
 	npc_set.NPCs_action(starter);
