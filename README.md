@@ -4,8 +4,7 @@ Squid game was very popular recently. In the series, the game called Red light, 
 <img src="https://user-images.githubusercontent.com/67142421/148660499-dd3b5e63-a2bc-4b17-9c36-49faff18ed68.png" width="600" height="800">
 
 ### 📺Video : https://youtu.be/y1a2rwSVneo 
-</br>
-
+---
 ## ⚒️Skills used
 * C++, SMFL
 
