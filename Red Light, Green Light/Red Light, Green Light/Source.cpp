@@ -66,8 +66,8 @@ public:
 
 class NPC {
 	Texture stickman_texture; // Player
-	Sprite npc;
 public:
+	Sprite npc;
 	NPC(int y) {
 		stickman_texture.loadFromFile("resources/stickman.png"); // Player
 		npc.setTexture(stickman_texture);
@@ -78,10 +78,11 @@ public:
 	void draw_npc(RenderWindow& window) {
 		window.draw(npc);
 	}
-
+	
 	void NPC_action(Starter& starter) {
 		while (true) {
-			int moving_interval = random_integer(70, 300);
+			Sleep(300);
+			int moving_interval = random_integer(80, 200);
 			printf("%d\n", moving_interval);
 			/*bool times_up = false;
 			thread thread1(alarm, 1000, times_up);
@@ -97,6 +98,7 @@ public:
 	}
 };
 
+
 class NPC_set {
 	vector<NPC*> npcs;
 	Texture stickman_texture;
@@ -106,6 +108,14 @@ public:
 		int y = 800 - 80;
 		for (int i = 0; i < 3; i++) {
 			npcs.push_back(new NPC(y));
+			y -= 100;
+		}
+	}
+
+	void recover_position() {
+		int y = 800 - 80;
+		for (int i = 0; i < 3; i++) {
+			npcs[i]->npc.setPosition(11, y);
 			y -= 100;
 		}
 	}
@@ -233,27 +243,29 @@ public:
 	void game_over() {
 		text.setFillColor(Color::Red);
 		text.setCharacterSize(55);
-		text.setPosition(200, 380);
-		text.setString("GAME OVER");
+		text.setPosition(270, 380);
+		text.setString("GAME OVER\nEnter to retry");
 	}
 
 	void game_clear() {
 		text.setFillColor(Color::Yellow);
 		text.setCharacterSize(55);
-		text.setPosition(200, 380);
-		text.setString("GAME CLEAR");
+		text.setPosition(270, 380);
+		text.setString("GAME CLEAR\nEnter to retry");
 	}
 
 	bool is_game_done() {
 		return game_done;
 	}
 
-	void restart_game(Sound& red_light_green_light_sound) {
+	void restart_game(Sound& red_light_green_light_sound, NPC_set& npc_set) {
 		text.setFillColor(Color::Black);
 		text.setCharacterSize(44);
 		text.setPosition(11, 11);
 
-		player.setPosition(11, 600 - 80);
+		player.setPosition(11, 900 - 80);
+		int y = 800 - 80;
+		npc_set.recover_position();
 
 		Sleep(3333);
 		game_done = false;
@@ -280,7 +292,6 @@ int main() {
 
 	thread thread1(&Main_game::robot_killer, &main_game, ref(starter.red_light_green_light_sound)); // Robot killer
 	thread1.detach();
-
 	thread thread2(&Main_game::timer, &main_game);
 	thread2.detach();
 
@@ -308,7 +319,7 @@ int main() {
 					if (Keyboard::isKeyPressed(Keyboard::Enter) == true)
 						break;
 
-			main_game.restart_game(starter.red_light_green_light_sound);
+			main_game.restart_game(starter.red_light_green_light_sound, npc_set);
 		}
 	}
 }
