@@ -251,7 +251,7 @@ public:
 
 	void move_right(Game_done& game_done) {
 		player_sprite->move(3, 0);
-		if (red_light_green_light_sound->getStatus() == Sound::Playing == false || seconds <= 0) { // Kill and game over if moved when the robot is watching or time's up
+		if (red_light_green_light_sound->getStatus() == Sound::Playing == false || seconds <= 0) { // Kill and game over if moving when the robot is watching or time's up
 			is_game_done = true;
 			shooting_sound->play();
 			red_light_green_light_sound->stop();
