@@ -17,6 +17,7 @@ int random_integer(int min, int max) {
 	return random(mersenne);
 }
 
+Texture *stickman_texture;
 class Starter {
 public:
 	RenderWindow window;
@@ -49,6 +50,9 @@ public:
 		red_light_green_light_sound.setBuffer(soundbuffer[0]);
 		soundbuffer[1].loadFromFile("resources/shooting_sound.wav");
 		shooting_sound.setBuffer(soundbuffer[1]);
+
+		stickman_texture = new Texture();
+		stickman_texture->loadFromFile("resources/stickman.png");
 	}
 };
 
@@ -65,12 +69,11 @@ public:
 //}
 
 class NPC {
-	Texture stickman_texture; // Player
 public:
 	Sprite npc;
 	NPC(int y) {
-		stickman_texture.loadFromFile("resources/stickman.png"); // Player
-		npc.setTexture(stickman_texture);
+		
+		npc.setTexture(*stickman_texture);
 		npc.scale(0.2f, 0.2f);
 		npc.setPosition(11, y);
 	}
@@ -148,9 +151,7 @@ class Main_game {
 	bool right_key_pressed = false, game_done = false;
 
 	Texture red_light, green_light; // Robot
-	Sprite robot;
-	Texture stickman_texture; // Player
-	Sprite player;
+	Sprite robot, player;
 
 public:
 	Event event;
@@ -166,8 +167,7 @@ public:
 		green_light.loadFromFile("resources/green_light.png");
 		robot.setPosition(350, 110);
 
-		stickman_texture.loadFromFile("resources/stickman.png"); // Player
-		player.setTexture(stickman_texture);
+		player.setTexture(*stickman_texture);
 		player.setPosition(11, 900 - 80);
 		player.scale(0.2f, 0.2f);
 	}
