@@ -1,4 +1,4 @@
 ﻿  Source.cpp
-C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\Red Light, Green Light\Source.cpp(78,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\Red Light, Green Light\Source.cpp(121,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\Red Light, Green Light\Source.cpp(82,23): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\Red Light, Green Light\Source.cpp(125,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Red Light, Green Light.vcxproj -> C:\Users\vacu9\source\repos\Red-light-green-light\Red Light, Green Light\x64\Debug\Red Light, Green Light.exe

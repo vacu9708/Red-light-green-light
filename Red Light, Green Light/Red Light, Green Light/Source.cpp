@@ -17,28 +17,20 @@ int random_integer(int min, int max) {
 	return random(mersenne);
 }
 
+Event event;
 Texture *stickman_texture;
+Sprite* player_sprite;
+RenderWindow *window;
+Sound *shooting_sound, *red_light_green_light_sound;
 class Starter {
 public:
-	RenderWindow window;
-
 	RectangleShape sky;
 
 	Font font;
 	Text text;
 
-	SoundBuffer soundbuffer[2]; // Sound
-	Sound shooting_sound;
-	Sound red_light_green_light_sound;
-
+	SoundBuffer soundbuffer[2];
 	Starter() {
-		window.create(VideoMode(800, 900), "Red light, green light"); // Window
-		window.setFramerateLimit(60);
-		window.clear(Color::Black);
-
-		sky.setSize(Vector2f(800, 100)); // Sky
-		sky.setFillColor(Color::Cyan);
-
 		font.loadFromFile("resources/AGENCYR.ttf"); // Text
 		text.setFont(font);
 		text.setFillColor(Color::Green);
@@ -46,13 +38,25 @@ public:
 		text.setPosition(200, 380);
 		text.setString("Press Enter to start");
 
+		window = new RenderWindow(VideoMode(800, 900), "Red light, green light");
+		window->setFramerateLimit(60);
+		window->clear(Color::Black);
+		window->draw(text);
+		window->display();
+
+		sky.setSize(Vector2f(800, 100)); // Sky
+		sky.setFillColor(Color::Cyan);
+
+		shooting_sound = new Sound();
+		red_light_green_light_sound = new Sound();
 		soundbuffer[0].loadFromFile("resources/Red light green light sound.wav"); // Sound
-		red_light_green_light_sound.setBuffer(soundbuffer[0]);
+		red_light_green_light_sound->setBuffer(soundbuffer[0]);
 		soundbuffer[1].loadFromFile("resources/shooting_sound.wav");
-		shooting_sound.setBuffer(soundbuffer[1]);
+		shooting_sound->setBuffer(soundbuffer[1]);
 
 		stickman_texture = new Texture();
 		stickman_texture->loadFromFile("resources/stickman.png");
+		player_sprite = new Sprite();
 	}
 };
 
@@ -82,7 +86,7 @@ public:
 		window.draw(npc);
 	}
 	
-	void NPC_action(Starter& starter) {
+	void NPC_action() {
 		while (true) {
 			Sleep(300);
 			int moving_interval = random_integer(80, 200);
@@ -90,13 +94,13 @@ public:
 			/*bool times_up = false;
 			thread thread1(alarm, 1000, times_up);
 			thread1.detach();*/
-			while (starter.red_light_green_light_sound.getStatus() == Sound::Playing) {
+			while (red_light_green_light_sound->getStatus() == Sound::Playing) {
 				npc.move(3, 0);
 				Sleep(moving_interval);
 				if (npc.getPosition().x > 800) // NPC winning the game
 					return;
 			}
-			while (starter.red_light_green_light_sound.getStatus() != Sound::Playing);
+			while (red_light_green_light_sound->getStatus() != Sound::Playing);
 		}
 	}
 };
@@ -130,7 +134,7 @@ public:
 
 	void NPCs_action(Starter& starter) {
 		for (int i = 0; i < 3; i++) {
-			threads.push_back(thread(&NPC::NPC_action, npcs[i], ref(starter)));
+			threads.push_back(thread(&NPC::NPC_action, npcs[i]));
 			threads[i].detach();
 		}
 
@@ -143,103 +147,63 @@ public:
 	}
 };
 
-class Main_game {
-	int seconds = 60;
-	Font font;
-	Text text;
+int remaining_seconds = 60;
+bool is_game_done = false;
 
-	bool right_key_pressed = false, game_done = false;
+class Robot {
+	Font font;
+	Text score;
 
 	Texture red_light, green_light; // Robot
-	Sprite robot, player;
+	Sprite robot;
 
 public:
-	Event event;
-
-	Main_game() {
+	Robot() {
 		font.loadFromFile("resources/AGENCYR.ttf"); // Score
-		text.setFont(font);
-		text.setFillColor(Color::Black);
-		text.setCharacterSize(44);
-		text.setPosition(11, 11);
+		score.setFont(font);
+		score.setFillColor(Color::Black);
+		score.setCharacterSize(44);
+		score.setPosition(11, 11);
 
 		red_light.loadFromFile("resources/red_light.png"); // Robot
 		green_light.loadFromFile("resources/green_light.png");
 		robot.setPosition(350, 110);
-
-		player.setTexture(*stickman_texture);
-		player.setPosition(11, 900 - 80);
-		player.scale(0.2f, 0.2f);
-	}
-
-	void draw_plyaer(RenderWindow& window) {
-		window.draw(player);
-	}
-
-	void move_right(Sound& red_light_green_light_sound, Sound& shooting_sound) {
-		player.move(3, 0);
-		if (red_light_green_light_sound.getStatus() == Sound::Playing == false || seconds <= 0) { // Kill if the robot is watching or time's up
-			game_done = true;
-			shooting_sound.play();
-			red_light_green_light_sound.stop();
-			game_over();
-			return;
-		}
-		if (player.getPosition().x >= 800) { // Game clear
-			game_done = true;
-			red_light_green_light_sound.stop();
-			game_clear();
-			return;
-		}
-	}
-
-	inline void events(Sound& red_light_green_light_sound, Sound& shooting_sound, RenderWindow& window) {
-		if (Keyboard::isKeyPressed(Keyboard::Right) == false) // To prevent holding the right key
-			right_key_pressed = false;
-		while (window.pollEvent(event)) {
-			switch (event.type) {
-			case Event::Closed:
-				window.clear();
-				break;
-			case Event::KeyPressed:
-				if (Keyboard::isKeyPressed(Keyboard::Right) == true && right_key_pressed == false) { // Move right
-					right_key_pressed = true;
-					move_right(red_light_green_light_sound, shooting_sound);
-				}
-				break;
-			}
-		}
 	}
 
 	void timer() {
 		while (true) {
-			text.setString("Left time : " + to_string(seconds));
+			score.setString("Left time : " + to_string(remaining_seconds));
 			Sleep(1000);
-			seconds--;
+			remaining_seconds--;
 		}
 	}
 
-	void draw_text(RenderWindow& window) {
-		window.draw(text);
+	void draw_score() {
+		window->draw(score);
 	}
 
-	void robot_killer(Sound& red_light_green_light_sound) {
+	void robot_killer() {
 		while (true) {
-			if (game_done == true)
+			if (is_game_done == true)
 				return;
 
 			robot.setTexture(green_light); // Green light
-			red_light_green_light_sound.play();
-			while (red_light_green_light_sound.getStatus() == Sound::Playing == true); // Wait until the sound ends
+			red_light_green_light_sound->play();
+			while (red_light_green_light_sound->getStatus() == Sound::Playing == true); // Wait until the sound ends
 			robot.setTexture(red_light); // Red light
 			Sleep(2888);
 		}
 	}
 
-	void draw_robot(RenderWindow& window) {
-		window.draw(robot);
+	void draw_robot() {
+		window->draw(robot);
 	}
+};
 
+class Game_done {
+	Font font;
+	Text text;
+public:
 	void game_over() {
 		text.setFillColor(Color::Red);
 		text.setCharacterSize(55);
@@ -254,72 +218,117 @@ public:
 		text.setString("GAME CLEAR\nEnter to retry");
 	}
 
-	bool is_game_done() {
-		return game_done;
-	}
-
-	void restart_game(Sound& red_light_green_light_sound, NPC_set& npc_set) {
+	void restart_game(NPC_set& npc_set, Robot& robot, Game_done& game_done) {
 		text.setFillColor(Color::Black);
 		text.setCharacterSize(44);
 		text.setPosition(11, 11);
 
-		player.setPosition(11, 900 - 80);
+		player_sprite->setPosition(11, 900 - 80);
 		int y = 800 - 80;
 		npc_set.recover_position();
 
 		Sleep(3333);
-		game_done = false;
+		is_game_done = false;
 
-		seconds = 61;
-		thread thread1(&Main_game::robot_killer, this, ref(red_light_green_light_sound));
+		remaining_seconds = 61;
+		thread thread1(&Robot::robot_killer, &robot);
 		thread1.detach();
+	}
+};
+
+class Player {
+	bool right_key_pressed = false;
+public:
+	Player() {
+		player_sprite->setTexture(*stickman_texture);
+		player_sprite->setPosition(11, 900 - 80);
+		player_sprite->scale(0.2f, 0.2f);
+	}
+
+	void draw_plyaer() {
+		window->draw(*player_sprite);
+	}
+
+	void move_right(Game_done& game_done) {
+		player_sprite->move(3, 0);
+		if (red_light_green_light_sound->getStatus() == Sound::Playing == false || seconds <= 0) { // Kill if the robot is watching or time's up
+			is_game_done = true;
+			shooting_sound->play();
+			red_light_green_light_sound->stop();
+			game_done.game_over();
+			return;
+		}
+		if (player_sprite->getPosition().x >= 800) { // Game clear
+			is_game_done = true;
+			red_light_green_light_sound->stop();
+			game_done.game_clear();
+			return;
+		}
+	}
+
+	inline void events(Game_done& game_done) {
+		if (Keyboard::isKeyPressed(Keyboard::Right) == false) // To prevent holding the right key
+			right_key_pressed = false;
+
+		while (window->pollEvent(event)) {
+			switch (event.type) {
+			case Event::Closed:
+				window->clear();
+				break;
+			case Event::KeyPressed:
+				if (Keyboard::isKeyPressed(Keyboard::Right) == true && right_key_pressed == false) { // Move right
+					right_key_pressed = true;
+					move_right(game_done);
+				}
+				break;
+			}
+		}
 	}
 };
 
 int main() {
 	Starter starter;
-	starter.window.draw(starter.text);
-	starter.window.display();
-
-	Main_game main_game;
+	Robot robot;
+	Player player;
 	NPC_set npc_set;
+	Game_done game_done;
 
 	while (true) { // Wait until Enter is pressed to start
-		if (starter.window.pollEvent(main_game.event))
+		if (window->pollEvent(event))
 			if (Keyboard::isKeyPressed(Keyboard::Enter) == true)
 				break;
 	}
 
-	thread thread1(&Main_game::robot_killer, &main_game, ref(starter.red_light_green_light_sound)); // Robot killer
+	thread thread1(&Robot::robot_killer, &robot);
 	thread1.detach();
-	thread thread2(&Main_game::timer, &main_game);
+	thread thread2(&Robot::timer, &robot);
 	thread2.detach();
 
 	npc_set.NPCs_action(starter);
 
-	while (starter.window.isOpen()) {
-		starter.window.clear(Color::White);
+	while (window->isOpen()) {
+		window->clear(Color::White);
 
-		main_game.events(starter.red_light_green_light_sound, starter.shooting_sound, starter.window); // To move player
-		starter.window.draw(starter.sky);
-		main_game.draw_plyaer(starter.window);
-		main_game.draw_text(starter.window);
-		main_game.draw_robot(starter.window);
-		npc_set.draw_npcs(starter.window);
+		player.events(game_done); // To move player
+		window->draw(starter.sky);
+		player.draw_plyaer();
+		robot.draw_score();
+		robot.draw_robot();
+		npc_set.draw_npcs(*window);
 
-		starter.window.display();
+		window->display();
 
-		if (main_game.is_game_done() == true) { // When the game is done
-			starter.window.clear(Color::Black);
-			main_game.draw_text(starter.window); // Game over or Game clear
-			starter.window.display();
+		if (is_game_done == true) { // When the game is done
+			window->clear(Color::Black);
+			robot.draw_score(); // Game over or Game clear
+			window->display();
 
 			while (true) // Restart when Enter is pressed
-				if (starter.window.pollEvent(main_game.event))
+				if (window->pollEvent(event))
 					if (Keyboard::isKeyPressed(Keyboard::Enter) == true)
 						break;
 
-			main_game.restart_game(starter.red_light_green_light_sound, npc_set);
+			game_done.restart_game(npc_set, robot, game_done);
 		}
 	}
 }
