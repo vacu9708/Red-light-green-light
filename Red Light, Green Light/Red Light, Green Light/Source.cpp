@@ -152,18 +152,18 @@ bool is_game_done = false;
 
 class Robot {
 	Font font;
-	Text score;
+	Text remaining_time;
 
 	Texture red_light, green_light; // Robot
 	Sprite robot;
 
 public:
 	Robot() {
-		font.loadFromFile("resources/AGENCYR.ttf"); // Score
-		score.setFont(font);
-		score.setFillColor(Color::Black);
-		score.setCharacterSize(44);
-		score.setPosition(11, 11);
+		font.loadFromFile("resources/AGENCYR.ttf"); // remaining_time
+		remaining_time.setFont(font);
+		remaining_time.setFillColor(Color::Black);
+		remaining_time.setCharacterSize(44);
+		remaining_time.setPosition(11, 11);
 
 		red_light.loadFromFile("resources/red_light.png"); // Robot
 		green_light.loadFromFile("resources/green_light.png");
@@ -172,14 +172,14 @@ public:
 
 	void timer() {
 		while (true) {
-			score.setString("Left time : " + to_string(remaining_seconds));
+			remaining_time.setString("Remaining time : " + to_string(remaining_seconds));
 			Sleep(1000);
 			remaining_seconds--;
 		}
 	}
 
-	void draw_score() {
-		window->draw(score);
+	void draw_remaining_time() {
+		window->draw(remaining_time);
 	}
 
 	void robot_killer() {
@@ -251,7 +251,7 @@ public:
 
 	void move_right(Game_done& game_done) {
 		player_sprite->move(3, 0);
-		if (red_light_green_light_sound->getStatus() == Sound::Playing == false || seconds <= 0) { // Kill if the robot is watching or time's up
+		if (red_light_green_light_sound->getStatus() == Sound::Playing == false || seconds <= 0) { // Kill and game over if moved when the robot is watching or time's up
 			is_game_done = true;
 			shooting_sound->play();
 			red_light_green_light_sound->stop();
@@ -312,7 +312,7 @@ int main() {
 		player.events(game_done); // To move player
 		window->draw(starter.sky);
 		player.draw_plyaer();
-		robot.draw_score();
+		robot.draw_remaining_time();
 		robot.draw_robot();
 		npc_set.draw_npcs(*window);
 
@@ -320,7 +320,7 @@ int main() {
 
 		if (is_game_done == true) { // When the game is done
 			window->clear(Color::Black);
-			robot.draw_score(); // Game over or Game clear
+			robot.draw_remaining_time();
 			window->display();
 
 			while (true) // Restart when Enter is pressed
