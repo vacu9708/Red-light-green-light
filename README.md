@@ -9,7 +9,7 @@ Squid game was very popular recently. In the series, the game called Red light, 
 * C++, SMFL
 
 ## 🥅Your goal in this game
-* You have to get to the finishing line before time's up without getting caught by the robot.
+* You have to get to the finish line before time's up without getting caught by the robot.
 
 ## Game rule, features
 * If you move while the robot is watching you, you get killed. Be careful.
