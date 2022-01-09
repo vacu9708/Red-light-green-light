@@ -1,5 +1,5 @@
 # 🚥Red-light-green-light (Squid game)
-Squid game was very popular recently. In the series, the game called Red light, green light appears. It's a thrilling and simple game. I got interested and wanted to make a video game of it to improve my C++ skills.
+Squid game was very popular recently. In the series, the game called Red light, green light appears. It's a thrilling and simple game. I got interested and wanted to make a video game of it to improve my C++ skills. I tried to get used to the Single Responsibility Principle in this project.
 
 <img src="https://user-images.githubusercontent.com/67142421/148660499-dd3b5e63-a2bc-4b17-9c36-49faff18ed68.png" width="600" height="800">
 
