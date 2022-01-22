@@ -75,7 +75,7 @@ public:
 class NPC {
 public:
 	Sprite npc;
-	NPC(int y) {
+	NPC(short y) {
 		
 		npc.setTexture(*stickman_texture);
 		npc.scale(0.2f, 0.2f);
@@ -112,7 +112,7 @@ class NPC_set {
 	vector<thread> threads;
 public:
 	NPC_set() {
-		int y = 800 - 80;
+		short y = 800 - 80;
 		for (int i = 0; i < 3; i++) {
 			npcs.push_back(new NPC(y));
 			y -= 100;
@@ -120,7 +120,7 @@ public:
 	}
 
 	void recover_position() {
-		int y = 800 - 80;
+		short y = 800 - 80;
 		for (int i = 0; i < 3; i++) {
 			npcs[i]->npc.setPosition(11, y);
 			y -= 100;
@@ -147,7 +147,7 @@ public:
 	}
 };
 
-int remaining_seconds = 60;
+short remaining_seconds = 60;
 bool is_game_done = false;
 
 class Robot {
@@ -224,7 +224,7 @@ public:
 		text.setPosition(11, 11);
 
 		player_sprite->setPosition(11, 900 - 80);
-		int y = 800 - 80;
+		short y = 800 - 80;
 		npc_set.recover_position();
 
 		Sleep(3333);
