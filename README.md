@@ -20,3 +20,4 @@ Squid game was very popular recently. In the series, the game called Red light, 
 ## Control
 * Move : ➡️ (You can't move back. Only run forward to finish!)
 
+## The way of installing SFML is written in Dodge poop page.
